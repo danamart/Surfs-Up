@@ -1,18 +1,22 @@
-from flask import Flask, jsonify
-import datetime
-from datetime import date, timedelta
-import numpy as numpy
-import sqlalchemy
-from sqlalchemy.orm import Session
-from sqlalchemy.ext.automap import automap_base
-from sqlalchemy import create_engine, func
+import numpy as np
 
-engine = create_engine("sqlite://hawaii.sqlite")
+import sqlalchemy
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, func
+import datetime as dt
+from flask import Flask, jsonify
+
+engine = create_engine("sqlite:///hawaii.sqlite")
+# reflect an existing database into a new model
 Base = automap_base()
+# reflect the tables
 Base.prepare(engine, reflect = True)
 
+# Save reference to the table
 Measurement = Base.classes.measurement
 Station = Base.classes.station
+# Create our session (link) from Python to the DB
 session = Session(engine)
 
 
@@ -26,12 +30,21 @@ app = Flask(__name__)
 # Flask Routes
 #################################################
 
+@app.route("/")
+def welcome():
+    """List all available api routes."""
+    return (
+        f"Available Routes:<br/>"
+        f"/api/v1.0/precipitation"
+        f"/api/v1.0/stations"
+    )
+
 @app.route("/api/v1.0/precipitation")
 #Convert the query results to a Dictionary using date as the key and prcp as the value.
 #Return the JSON representation of your dictionary.
 def prcp():
     previous_year = dt.date.today() - dt.timedelta(days=365)
-    prcp_year = session.query(measurement.date,func.sum(measurement.prcp)).filter(measurement.date >= previous_year).group_by(measurement.date).order_by(measurement.date).all()
+    prcp_year = session.query(Measurement.date,func.sum(Measurement.prcp)).filter(Measurement.date >= previous_year).group_by(Measurement.date).order_by(Measurement.date).all()
 
     prcp_dict = dict(prcp_year)
     return jsonify(prcp_dict)
