@@ -45,6 +45,5 @@ def stations():
 #When given the start and the end date, calculate the TMIN, TAVG, and TMAX for dates 
 #between the start and end date inclusive.
 
-
 if __name__ == "__main__":
     app.run(debug=True)
