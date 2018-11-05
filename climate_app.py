@@ -4,7 +4,8 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
-import datetime as dt
+import datetime 
+from datetime import date, timedelta
 from flask import Flask, jsonify
 
 engine = create_engine("sqlite:///hawaii.sqlite")
@@ -39,24 +40,26 @@ def welcome():
         f"/api/v1.0/stations"
     )
 
-@app.route("/api/v1.0/precipitation")
+#@app.route("/api/v1.0/precipitation")
 #Convert the query results to a Dictionary using date as the key and prcp as the value.
 #Return the JSON representation of your dictionary.
-def prcp():
-    previous_year = dt.date.today() - dt.timedelta(days=365)
-    prcp_year = session.query(Measurement.date,func.sum(Measurement.prcp)).filter(Measurement.date >= previous_year).group_by(Measurement.date).order_by(Measurement.date).all()
+#def prcp():
+    #previous_year = dt.date.today() - dt.timedelta(days=365)
+    #prcp_year = session.query(Measurement.date,func.sum(Measurement.prcp)).filter(Measurement.date >= previous_year).group_by(Measurement.date).order_by(Measurement.date).all()
+    #prcp_year = session.query(func.strftime("%Y-%m-%d",Measurement.date), func.sum(Measurement.prcp))\
+            #.filter(Measurement.date.between('2016-08-24','2017-08-23')).group_by(Measurement.date)\
+            #.order_by(Measurement.date).all()
+    #prcp_dict = dict(prcp_year)
+    #return jsonify(prcp_dict)
 
-    prcp_dict = dict(prcp_year)
-    return jsonify(prcp_dict)
 
 
-
-@app.route("/api/v1.0/stations")
+#@app.route("/api/v1.0/stations")
 #Return a JSON list of stations from the dataset
-def stations():
-    station_q = session.query(Station.station).all()
-    station_list = list(np.ravel(station_q))
-    return jsonify (station_list)
+#def stations():
+    #station_q = session.query(Station.station).all()
+    #station_list = list(np.ravel(station_q))
+    #return jsonify (station_list)
 
 
 #@app.route("/api/v1.0/tobs")
