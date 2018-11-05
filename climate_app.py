@@ -1,4 +1,20 @@
 from flask import Flask, jsonify
+import datetime
+from datetime import date, timedelta
+import numpy as numpy
+import sqlalchemy
+from sqlalchemy.orm import Session
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy import create_engine, func
+
+engine = create_engine("sqlite://hawaii.sqlite")
+Base = automap_base()
+Base.prepare(engine, reflect = True)
+
+Measurement = Base.classes.measurement
+Station = Base.classes.station
+session = Session(engine)
+
 
 #################################################
 # Flask Setup
